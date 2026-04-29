@@ -1,0 +1,47 @@
+# Nginx log path (mounted volume)
+log_path: /var/log/nginx/hng-access.log
+
+# Audit log path
+audit_log_path: /var/log/detector/audit.log
+
+# Dashboard
+dashboard_host: 0.0.0.0
+dashboard_port: 8080
+dashboard_refresh_seconds: 3
+
+# Sliding window sizes (seconds)
+per_ip_window_seconds: 60
+global_window_seconds: 60
+
+# Baseline rolling window
+baseline_window_minutes: 30
+baseline_recalc_interval_seconds: 60
+baseline_min_samples: 30       # minimum samples before baseline is valid
+baseline_floor_mean: 1.0       # floor to prevent division by zero
+baseline_floor_stddev: 0.5
+
+# Anomaly detection thresholds
+zscore_threshold: 3.0
+rate_multiplier_threshold: 5.0
+
+# Error surge detection
+error_surge_multiplier: 3.0    # 4xx/5xx rate multiplier vs baseline error rate
+error_surge_zscore_tightening: 2.0  # tighten zscore threshold to this when error surge detected
+
+# Blocking
+block_chain: INPUT             # iptables chain
+block_protocol: tcp
+
+# Auto-unban backoff schedule (minutes)
+unban_schedule_minutes:
+  - 10
+  - 30
+  - 120
+  - permanent                  # after 3 bans, permanent
+
+# Slack
+slack_webhook_url: ""          # overridden by env var SLACK_WEBHOOK_URL
+slack_timeout_seconds: 5
+
+# Ban notification window (seconds) — don't re-alert within this window for same IP
+ban_alert_cooldown_seconds: 60
